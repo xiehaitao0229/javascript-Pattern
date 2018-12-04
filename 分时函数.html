@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var arr = [];
+    for(var i=0;i<=1000;i++){
+      arr.push(i); //  假设装载了1000个好友的数据
+    }
+
+  /*   var renderFriendList = function(data){
+      for(var i=0,l=data.length;i<l;i++){
+        var div = document.createElement('div')
+        div.innerHTML = i;
+        document.body.appendChild(div);
+      }
+    }
+
+    renderFriendList(arr) */
+
+    
+    //  @arr  创建节点时需要的数据
+    //  @fn  封装创建节点逻辑的函数
+    //  @count  表示每一批创建的节点数量
+     
+    var timeChunk = function(arr,fn,count){
+      var obj,t;
+      var len = arr.length;
+
+      var start = function(){
+        for(var i=0;i<Math.min(count || 1,arr.length);i++){
+          var obj = arr.shift();
+          fn(obj)
+        }
+
+        return function(){
+          t = setTimeout(function(){
+            if(arr.length===0){  //  如果全部节点都已经被创建好
+              return clearInterval(t);
+            }
+            start();
+          },200)  //  分配执行的时间间隔
+        }
+      }
+    }
+
+    var renderFriendList = timeChunk(arr,function(n){
+      var div = document.createElement('div')
+        div.innerHTML = n;
+        document.body.appendChild(div);
+    },8)
+
+    renderFriendList()
+  </script>
+</body>
+</html>
